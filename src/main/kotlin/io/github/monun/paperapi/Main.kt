@@ -52,7 +52,12 @@ private fun execute(cmd: CommandLine): Boolean {
     var build = cmd.getOptionValue("build")
 
     if (build != null && version != null && build.equals("latest", true)) {
-        build = PaperAPI.latestBuild(version)
+        runCatching {
+            build = PaperAPI.latestBuild(version)
+        }.onFailure {
+            println(it.message)
+        }
+
     }
 
     when (request.lowercase()) {
