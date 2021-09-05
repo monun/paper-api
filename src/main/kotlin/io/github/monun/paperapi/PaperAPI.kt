@@ -48,13 +48,21 @@ object PaperAPI {
 
     fun build(version: String, build: String) {
         val response = infoBuild(version, build)
-        println(response)
         val application = response["downloads"].asJsonObject["application"].asJsonObject
 
         println("time=${response.get("time").asString}")
         println("commit=${response.getAsJsonArray("changes").first().asJsonObject.get("commit").asString}")
         println("jar=${application["name"].asString}")
         println("sha256=${application["sha256"].asString}")
+    }
+
+    fun commit(version: String, build: String) {
+        val response = infoBuild(version, build)
+        kotlin.runCatching {
+            println(response.getAsJsonArray("changes").first().asJsonObject.get("commit").asString)
+        }.onFailure {
+            println(response.toString())
+        }
     }
 
     fun download(version: String, build: String) {

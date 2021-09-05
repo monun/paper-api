@@ -7,7 +7,7 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) {
     val options = Options()
 
-    Option("r", "request", true, "Action to be requested (version, build, download)").apply {
+    Option("r", "request", true, "Action to be requested (version, build, download, commit)").apply {
         isRequired = true
     }.also {
         options += it
@@ -72,6 +72,12 @@ private fun execute(cmd: CommandLine): Boolean {
             requireNotNull(build) {"download request requires a build"}
 
             PaperAPI.download(version, build)
+        }
+        "commit" -> {
+            requireNotNull(version) {"download request requires a version"}
+            requireNotNull(build) {"download request requires a build"}
+
+            PaperAPI.commit(version, build)
         }
         else -> return false
     }
